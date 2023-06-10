@@ -53,17 +53,105 @@ def UDT_add(st):
 
 # 列出用户数据表中所有曲目
 def UDT_list():
-    print()
+    with open('user_data_table.csv', 'r', encoding='utf-8', newline='') as csvfile:
+        reader = csv.reader(csvfile)
+        rows = [row for row in reader]
+
+        # 寻找曲名的最大宽度
+        max_width = max([len(str(row[0])) for row in rows])
+        max_widths = [max_width, 5, 5, 10, 10]
+        head = ['曲名', '难度', '定数', '成绩', '潜力值']
+        head_widths = [max_width-2, 3, 3, 8, 7]
+
+        # 输出表头
+        formatted_row = ''
+        for i in range(len(head)):
+            formatted_row += str(head[i]).ljust(head_widths[i] + 2)
+        print(formatted_row)
+
+        # 输出用户数据表
+        for row in rows:
+            formatted_row = ''
+            for i in range(len(row)):
+                formatted_row += str(row[i]).ljust(max_widths[i] + 2)
+            print(formatted_row)
 
 
-# 在用户数据表搜索
-def UDT_search():
-    print()
-
-
-# 更新成绩
+# 更新用户数据表的成绩
 def UDT_update():
-    print()
+    print('请输入关键词以查找曲目')
+    st = input()
+
+    # 在用户数据表搜索
+    with open('user_data_table.csv', 'r', encoding='utf-8') as csvfile:
+        reader = csv.reader(csvfile)
+        rows = [row for row in reader]
+        res = []
+        dic = {}  # 存查找结果到原表行数的映射
+        row_no = 0  # 原表行数
+        idx = 0  # 结果编号
+        for row in rows:
+            if(row[0].upper().find(st.upper()) != -1):
+                res.append([idx]+row)
+                dic[idx] = row_no
+                idx += 1
+            row_no += 1
+        if(len(res) == 0):
+            print('未查找到结果，请重新查找')
+            return
+
+    # 寻找曲名的最大宽度
+    max_width = max([len(str(row[1])) for row in res])
+    max_widths = [5, max_width, 5, 5, 10, 10]
+    head = ['编号', '曲名', '难度', '定数', '成绩', '潜力值']
+    head_widths = [3, max_width, 3, 3, 8, 7]
+
+    # 输出表头
+    formatted_row = ''
+    for i in range(len(head)):
+        formatted_row += str(head[i]).ljust(head_widths[i] + 2)
+    print(formatted_row)
+
+    # 输出用户数据表
+    for row in res:
+        formatted_row = ''
+        for i in range(len(row)):
+            formatted_row += str(row[i]).ljust(max_widths[i] + 2)
+        print(formatted_row)
+
+    input_check = False
+    while input_check == False:
+        print("选择修改的曲目，输入编号")
+        idx = int(input())
+        if(idx >= len(res) or idx < 0):
+            print("编号不合法")
+        else:
+            input_check = True
+
+    print('输入更新后的成绩')
+    score = int(input())
+    rows[dic[idx]][3] = score
+    rows[dic[idx]][4] = ptt_cul(
+        float(rows[dic[idx]][2]), rows[dic[idx]][3])
+
+    with open('user_data_table.csv', 'w', encoding='utf-8', newline='') as new_csvfile:
+        writer = csv.writer(new_csvfile)
+        writer.writerows(rows)
 
 
-UDT_add('red')
+# 排序UDT方便计算b30
+def UDT_sort():
+    with open('user_data_table.csv', 'r', encoding='utf-8', newline='') as csvfile:
+        reader = csv.reader(csvfile)
+        rows = [row for row in reader]
+
+    sorted_rows = sorted(rows, key=lambda x: x[4])
+
+    with open('user_data_table.csv', 'w', newline='') as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerows(sorted_rows)
+
+
+# UDT_add('red')
+# UDT_sort()
+UDT_update()

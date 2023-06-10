@@ -10,7 +10,7 @@ def CCT_update():
     with open('chart_constant_table.csv', 'w', encoding='utf-8', newline='') as csvfile:
         writer = csv.writer(csvfile)
         for item in chart_constant_table('tr').items():
-            print(item.text().split('\n'))
+            # print(item.text().split('\n'))
             writer.writerow(item.text().split('\n'))
 
 # CCT_update()
