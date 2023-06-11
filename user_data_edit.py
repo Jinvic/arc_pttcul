@@ -4,7 +4,9 @@ from ptt_culculation import ptt_cul
 
 
 # 从定数表添加新行
-def UDT_add(st):
+def UDT_add():
+    print('请输入关键词以查找曲目')
+    st = input()
 
     res = CCT_search(st)
     if(len(res) == 0):
@@ -50,9 +52,13 @@ def UDT_add(st):
         writer = csv.writer(csvfile)
         writer.writerow(new_row)
 
+    UDT_sort()
+
 
 # 列出用户数据表中所有曲目
 def UDT_list():
+    UDT_sort()
+
     with open('user_data_table.csv', 'r', encoding='utf-8', newline='') as csvfile:
         reader = csv.reader(csvfile)
         rows = [row for row in reader]
@@ -138,6 +144,8 @@ def UDT_update():
         writer = csv.writer(new_csvfile)
         writer.writerows(rows)
 
+    UDT_sort()
+
 
 # 排序UDT方便计算b30
 def UDT_sort():
@@ -154,4 +162,4 @@ def UDT_sort():
 
 # UDT_add('red')
 # UDT_sort()
-UDT_update()
+# UDT_update()
