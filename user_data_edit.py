@@ -110,7 +110,7 @@ def UDT_update():
     max_width = max([len(str(row[1])) for row in res])
     max_widths = [5, max_width, 5, 5, 10, 10]
     head = ['编号', '曲名', '难度', '定数', '成绩', '潜力值']
-    head_widths = [3, max_width, 3, 3, 8, 7]
+    head_widths = [3, max_width-2, 3, 3, 8, 7]
 
     # 输出表头
     formatted_row = ''
