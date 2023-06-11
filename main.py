@@ -1,3 +1,4 @@
+import sys
 from spider import CCT_update
 from user_data_edit import UDT_add, UDT_list, UDT_update
 from ptt_culculation import b30_cul, r10_cul
@@ -5,6 +6,7 @@ from ptt_culculation import b30_cul, r10_cul
 
 def main():
     print('选择你要进行的操作：')
+    print('0. 退出程序')
     print('1. 更新定数表')
     print('2. 列出用户成绩')
     print('3. 添加新成绩')
@@ -15,12 +17,14 @@ def main():
     input_check = False
     while input_check == False:
         idx = int(input())
-        if(idx > 6 or idx <= 0):
+        if(idx > 6 or idx < 0):
             print("编号不合法")
         else:
             input_check = True
 
-    if(idx == 1):
+    if(idx == 0):
+        sys.exit()
+    elif(idx == 1):
         CCT_update()
     elif(idx == 2):
         UDT_list()
