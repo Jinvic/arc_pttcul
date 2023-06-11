@@ -153,9 +153,9 @@ def UDT_sort():
         reader = csv.reader(csvfile)
         rows = [row for row in reader]
 
-    sorted_rows = sorted(rows, key=lambda x: x[4])
+    sorted_rows = sorted(rows, key=lambda x: float(x[4]), reverse=True)
 
-    with open('user_data_table.csv', 'w', newline='') as csvfile:
+    with open('user_data_table.csv', 'w', encoding='utf-8', newline='') as csvfile:
         writer = csv.writer(csvfile)
         writer.writerows(sorted_rows)
 
