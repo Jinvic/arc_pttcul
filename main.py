@@ -26,6 +26,7 @@ def main():
         sys.exit()
     elif(idx == 1):
         CCT_update()
+        print('定数表已更新')
     elif(idx == 2):
         UDT_list()
     elif(idx == 3):
@@ -33,10 +34,12 @@ def main():
     elif(idx == 4):
         UDT_update()
     elif(idx == 5):
+        print('你当前的b30为：')
         print(b30_cul())
     else:
         print('输入你现在的ptt')
         ptt = input()
+        print('你当前的r10为：')
         print(r10_cul(b30_cul(), float(ptt)))
 
 

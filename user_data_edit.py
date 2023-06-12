@@ -45,6 +45,7 @@ def UDT_add():
                res[idx][dif_id+1],
                score,
                ptt_cul(float(res[idx][dif_id+1]), score)]
+    print('已添加成绩：')
     print(new_row)
 
     # 写入用户数据表
@@ -139,6 +140,8 @@ def UDT_update():
     rows[dic[idx]][3] = score
     rows[dic[idx]][4] = ptt_cul(
         float(rows[dic[idx]][2]), rows[dic[idx]][3])
+    print('已更新成绩：')
+    print(rows[dic[idx]])
 
     with open('user_data_table.csv', 'w', encoding='utf-8', newline='') as new_csvfile:
         writer = csv.writer(new_csvfile)
