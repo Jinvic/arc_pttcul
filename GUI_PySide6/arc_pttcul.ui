@@ -6,20 +6,20 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>799</width>
+    <width>551</width>
     <height>572</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>arc_pttcul</string>
   </property>
   <widget class="QTableView" name="tableView">
    <property name="geometry">
     <rect>
      <x>210</x>
      <y>10</y>
-     <width>581</width>
-     <height>551</height>
+     <width>331</width>
+     <height>441</height>
     </rect>
    </property>
   </widget>
@@ -29,149 +29,182 @@
      <x>10</x>
      <y>10</y>
      <width>191</width>
-     <height>451</height>
+     <height>441</height>
     </rect>
    </property>
    <property name="title">
     <string>操作</string>
    </property>
-   <widget class="QWidget" name="verticalLayoutWidget">
+   <widget class="QPushButton" name="PB_init">
     <property name="geometry">
      <rect>
-      <x>9</x>
-      <y>19</y>
-      <width>171</width>
-      <height>421</height>
+      <x>10</x>
+      <y>20</y>
+      <width>169</width>
+      <height>51</height>
      </rect>
     </property>
-    <layout class="QVBoxLayout" name="verticalLayout">
-     <property name="spacing">
-      <number>6</number>
-     </property>
-     <item>
-      <widget class="QPushButton" name="PB_init">
-       <property name="font">
-        <font>
-         <pointsize>12</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>
 初始化
 </string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="PB_CCT_update">
-       <property name="font">
-        <font>
-         <pointsize>12</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="PB_CCT_update">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>80</y>
+      <width>169</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>
 更新定数表
 </string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="PB_UDT_list">
-       <property name="font">
-        <font>
-         <pointsize>12</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="PB_UDT_list">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>140</y>
+      <width>169</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>
 列出用户成绩
 </string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="PB_UDT_update">
-       <property name="font">
-        <font>
-         <pointsize>12</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>
-更新现有成绩
-</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="PB_UDT_add">
-       <property name="font">
-        <font>
-         <pointsize>12</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="PB_UDT_add">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>200</y>
+      <width>169</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>
 添加新成绩
 </string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="PB_b30">
-       <property name="font">
-        <font>
-         <pointsize>12</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="PB_b30">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>320</y>
+      <width>169</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>
 计算b30
 </string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="PB_r10">
-       <property name="font">
-        <font>
-         <pointsize>12</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="PB_r10">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>380</y>
+      <width>169</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>
 计算r10
 </string>
-       </property>
-      </widget>
-     </item>
-    </layout>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="PB_UDT_update">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>260</y>
+      <width>169</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>
+更新现有成绩
+</string>
+    </property>
    </widget>
   </widget>
   <widget class="QGroupBox" name="groupBox_2">
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>460</y>
-     <width>191</width>
-     <height>101</height>
+     <y>450</y>
+     <width>531</width>
+     <height>111</height>
     </rect>
    </property>
    <property name="title">
-    <string>输出</string>
+    <string>信息</string>
    </property>
    <widget class="QPlainTextEdit" name="output_text">
     <property name="geometry">
      <rect>
       <x>10</x>
       <y>20</y>
-      <width>171</width>
-      <height>71</height>
+      <width>511</width>
+      <height>81</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
     <property name="plainText">
-     <string/>
+     <string>如果你是第一次使用此程序，请先初始化。
+注意：如果你不是第一次使用，初始化将清除所有数据！</string>
     </property>
    </widget>
   </widget>
