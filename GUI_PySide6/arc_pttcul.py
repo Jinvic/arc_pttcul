@@ -3,7 +3,7 @@ import csv
 import requests
 from pyquery import PyQuery as pq
 
-from PySide6.QtWidgets import QApplication, QWidget, QInputDialog, QHeaderView
+from PySide6.QtWidgets import QApplication, QWidget, QInputDialog, QHeaderView, QMessageBox
 from PySide6 import QtGui
 from arc_pttcul_ui import Ui_Form
 
@@ -30,6 +30,13 @@ class Widget(QWidget):
         self.UDT = 'user_data_table.csv'
 
     def init_func(self):
+        btn = QMessageBox.warning(self, "警告", "初始化操作将清除已有数据\n确定要继续吗？",
+                                  QMessageBox.Ok,
+                                  QMessageBox.Cancel)
+        if(btn != QMessageBox.Ok):
+            self.send_message('取消初始化')
+            return
+
         if self.CCT_update_func() == 'SSLError':
             return
 
@@ -46,7 +53,7 @@ class Widget(QWidget):
             doc = pq(url=target_url)
         except requests.exceptions.SSLError as e:
             self.send_message(['爬取定数表失败。\n',
-                               f'错误类型：requests.exceptions.SSLError\n',
+                               '错误类型：requests.exceptions.SSLError\n',
                                '请关闭代理后重试。'])
             return 'SSLError'
         chart_constant_table = doc('tbody')  # 定数表
