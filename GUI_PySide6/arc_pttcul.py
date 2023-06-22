@@ -1,3 +1,4 @@
+import os
 import sys
 import csv
 import requests
@@ -28,6 +29,15 @@ class Widget(QWidget):
 
         self.CCT = 'chart_constant_table.csv'
         self.UDT = 'user_data_table.csv'
+
+        self.config_check()
+
+    def config_check(self):
+        if(os.path.exists(self.CCT) == False or os.path.exists(self.UDT) == False):
+            QMessageBox.warning(self, "警告", "未检测到配置文件\n请先初始化")
+            return False
+        else:
+            return True
 
     def init_func(self):
         btn = QMessageBox.warning(self, "警告", "初始化操作将清除已有数据\n确定要继续吗？",
@@ -65,7 +75,11 @@ class Widget(QWidget):
             self.send_message('定数表已更新')
 
     def UDT_list_func(self):
+        if(self.config_check()==False):
+            return
+        
         UDT_sort()
+
         with open('user_data_table.csv', 'r', encoding='utf-8', newline='') as csvfile:
             reader = csv.reader(csvfile)
             head = next(reader)
@@ -74,6 +88,9 @@ class Widget(QWidget):
             self.send_message('已列出全部成绩')
 
     def UDT_add_func(self):
+        if(self.config_check()==False):
+            return
+
         # text, ok = QInputDialog.getText(parent, '标题', '标签')
         key_word, okPressed = QInputDialog.getText(self, "查找曲目", "请输入关键词以查找曲目")
         if(okPressed == False):
@@ -121,6 +138,9 @@ class Widget(QWidget):
         self.send_message(['已添加新成绩：\n', str(new_row)])
 
     def UDT_update_func(self):
+        if(self.config_check()==False):
+            return
+        
         key_word, okPressed = QInputDialog.getText(self, "查找曲目", "请输入关键词以查找曲目")
         if(okPressed == False):
             return
@@ -153,11 +173,17 @@ class Widget(QWidget):
         self.send_message(['已更新成绩：\n', str(new_row)])
 
     def b30_func(self):
+        if(self.config_check()==False):
+            return
+        
         head, rows, b30 = b30_cul()
         self.csv_list(head, rows)
         self.send_message(['已列出b30\n', f'你当前的b30为：{b30}'])
 
     def r10_func(self):
+        if(self.config_check()==False):
+            return
+        
         # num, ok = QInputDialog.getDouble(parent, '标题', '标签', 0.00, min, max, decimals)
         ptt, okPressed = QInputDialog.getDouble(
             self, "输入ptt", "请输入你当前的ptt", 0.00, 0, 14, 2)
@@ -180,6 +206,7 @@ class Widget(QWidget):
 
 
 def csv_search(st, filename):
+    
     # 读取csv并查询
     with open(filename, 'r', encoding='utf-8') as csvfile:
         reader = csv.reader(csvfile)
