@@ -75,9 +75,9 @@ class Widget(QWidget):
             self.send_message('定数表已更新')
 
     def UDT_list_func(self):
-        if(self.config_check()==False):
+        if(self.config_check() == False):
             return
-        
+
         UDT_sort()
 
         with open('user_data_table.csv', 'r', encoding='utf-8', newline='') as csvfile:
@@ -88,48 +88,88 @@ class Widget(QWidget):
             self.send_message('已列出全部成绩')
 
     def UDT_add_func(self):
-        if(self.config_check()==False):
+        if(self.config_check() == False):
             return
 
-        # text, ok = QInputDialog.getText(parent, '标题', '标签')
-        key_word, okPressed = QInputDialog.getText(self, "查找曲目", "请输入关键词以查找曲目")
+        inputways = ['从定数表查找', '手动输入']
+        inputway, okPressed = QInputDialog.getItem(
+            self, '选择输入方式', '从定数表查找或者手动输入', inputways, editable=False)
         if(okPressed == False):
             return
-        dic, head, res, errlog = csv_search(key_word, self.CCT)
-        if(errlog != ''):
-            self.send_message(errlog)
-            return
-        self.send_message(f'已列出包含“{key_word}”的曲目')
 
-        self.csv_list(head, res)
-        # num, ok = QInputDialog.getInt(parent, '标题', '标签', 0, min, max, step)
-        idx, okPressed = QInputDialog.getInt(
-            self, "选择曲目", "请输入对应曲目的序号", 0, 1, len(res), 1)
-        if(okPressed == False):
-            return
-        row = res[idx-1]
+        if(inputway == '从定数表查找'):
+            # text, ok = QInputDialog.getText(parent, '标题', '标签')
+            key_word, okPressed = QInputDialog.getText(
+                self, "查找曲目", "请输入关键词以查找曲目")
+            if(okPressed == False):
+                return
+            dic, head, res, errlog = csv_search(key_word, self.CCT)
+            if(errlog != ''):
+                self.send_message(errlog)
+                return
+            self.send_message(f'已列出包含“{key_word}”的曲目')
 
-        # items = ['选项1', '选项2', '选项3']
-        # item, ok = QInputDialog.getItem(parent, '标题', '标签', items, editable=False)
-        if(len(row) == 5):
+            self.csv_list(head, res)
+            # num, ok = QInputDialog.getInt(parent, '标题', '标签', 0, min, max, step)
+            idx, okPressed = QInputDialog.getInt(
+                self, "选择曲目", "请输入对应曲目的序号", 0, 1, len(res), 1)
+            if(okPressed == False):
+                return
+            row = res[idx-1]
+
+            # items = ['选项1', '选项2', '选项3']
+            # item, ok = QInputDialog.getItem(parent, '标题', '标签', items, editable=False)
+            if(len(row) == 5):
+                difficults = ['PST', 'PRS', 'FTR', 'BYD']
+            else:
+                difficults = ['PST', 'PRS', 'FTR']
+            difficult, okPressed = QInputDialog.getItem(
+                self, '选择难度', '选择对应的难度', difficults, editable=False)
+            if(okPressed == False):
+                return
+
+            score, okPressed = QInputDialog.getInt(
+                self, '输入成绩', '输入你的游玩成绩', 0, 0)
+            if(okPressed == False):
+                return
+
+            name = row[0]
+            cc = row[difficults.index(difficult)+1]
+            ptt = ptt_cul(float(cc), score)
+            # 曲名 难度 定数 成绩 潜力值
+            new_row = [name, difficult, cc, score, ptt]
+
+        elif(inputway == '手动输入'):
+            # text, ok = QInputDialog.getText(parent, '标题', '标签')
+            name, okPressed = QInputDialog.getText(
+                self, "曲目名称", "请输入曲目名称")
+            if(okPressed == False):
+                return
+
+            # items = ['选项1', '选项2', '选项3']
+            # item, ok = QInputDialog.getItem(parent, '标题', '标签', items, editable=False)
             difficults = ['PST', 'PRS', 'FTR', 'BYD']
+            difficult, okPressed = QInputDialog.getItem(
+                self, '选择难度', '选择对应的难度', difficults, editable=False)
+            if(okPressed == False):
+                return
+
+            cc, okPressed = QInputDialog.getDouble(
+                self, '输入定数', '输入曲目的定数', 0, 0, decimals=1)
+            if(okPressed == False):
+                return
+
+            score, okPressed = QInputDialog.getInt(
+                self, '输入成绩', '输入你的游玩成绩', 0, 0)
+            if(okPressed == False):
+                return
+
+            ptt = ptt_cul(float(cc), score)
+            # 曲名 难度 定数 成绩 潜力值
+            new_row = [name, difficult, cc, score, ptt]
+
         else:
-            difficults = ['PST', 'PRS', 'FTR']
-        difficult, okPressed = QInputDialog.getItem(
-            self, '选择难度', '选择对应的难度', difficults, editable=False)
-        if(okPressed == False):
             return
-
-        score, okPressed = QInputDialog.getInt(
-            self, '输入成绩', '输入你的游玩成绩', 0, 0)
-        if(okPressed == False):
-            return
-
-        name = row[0]
-        cc = row[difficults.index(difficult)+1]
-        ptt = ptt_cul(float(cc), score)
-        # 曲名 难度 定数 成绩 潜力值
-        new_row = [name, difficult, cc, score, ptt]
 
         with open('user_data_table.csv', 'a', encoding='utf-8', newline='') as csvfile:
             writer = csv.writer(csvfile)
@@ -138,9 +178,9 @@ class Widget(QWidget):
         self.send_message(['已添加新成绩：\n', str(new_row)])
 
     def UDT_update_func(self):
-        if(self.config_check()==False):
+        if(self.config_check() == False):
             return
-        
+
         key_word, okPressed = QInputDialog.getText(self, "查找曲目", "请输入关键词以查找曲目")
         if(okPressed == False):
             return
@@ -173,17 +213,17 @@ class Widget(QWidget):
         self.send_message(['已更新成绩：\n', str(new_row)])
 
     def b30_func(self):
-        if(self.config_check()==False):
+        if(self.config_check() == False):
             return
-        
+
         head, rows, b30 = b30_cul()
         self.csv_list(head, rows)
         self.send_message(['已列出b30\n', f'你当前的b30为：{b30}'])
 
     def r10_func(self):
-        if(self.config_check()==False):
+        if(self.config_check() == False):
             return
-        
+
         # num, ok = QInputDialog.getDouble(parent, '标题', '标签', 0.00, min, max, decimals)
         ptt, okPressed = QInputDialog.getDouble(
             self, "输入ptt", "请输入你当前的ptt", 0.00, 0, 14, 2)
@@ -206,7 +246,7 @@ class Widget(QWidget):
 
 
 def csv_search(st, filename):
-    
+
     # 读取csv并查询
     with open(filename, 'r', encoding='utf-8') as csvfile:
         reader = csv.reader(csvfile)
