@@ -58,21 +58,48 @@ class Widget(QWidget):
         self.send_message('初始化完成')
 
     def CCT_update_func(self):
-        target_url = 'https://wiki.arcaea.cn/%E5%AE%9A%E6%95%B0%E8%AF%A6%E8%A1%A8'  # 定数详表页面
-        try:
-            doc = pq(url=target_url)
-        except requests.exceptions.SSLError as e:
-            self.send_message(['爬取定数表失败。\n',
-                               '错误类型：requests.exceptions.SSLError\n',
-                               '请关闭代理后重试。'])
-            return 'SSLError'
-        chart_constant_table = doc('tbody')  # 定数表
+        inputways = ['中文维基', '英文维基']
+        inputway, okPressed = QInputDialog.getItem(
+            self, '选择定数表获取方式', '中文维基: wiki.arcaea.cn/定数详表\n英文维基: arcaea.fandom.com/wiki/Songs_by_Level', inputways, editable=False)
+        if(okPressed == False):
+            return
 
-        with open(self.CCT, 'w', encoding='utf-8', newline='') as csvfile:
-            writer = csv.writer(csvfile)
-            for item in chart_constant_table('tr').items():
-                writer.writerow(item.text().split('\n'))
-            self.send_message('定数表已更新')
+        if(inputway == '中文维基'):
+            target_url = 'https://wiki.arcaea.cn/%E5%AE%9A%E6%95%B0%E8%AF%A6%E8%A1%A8'  # 定数详表页面
+            try:
+                doc = pq(url=target_url)
+            except requests.exceptions.SSLError as e:
+                self.send_message(['爬取定数表失败。\n',
+                                   '错误类型：requests.exceptions.SSLError\n',
+                                   '请关闭代理后重试。'])
+                return 'SSLError'
+            chart_constant_table = doc('tbody')  # 定数表
+
+            with open(self.CCT, 'w', encoding='utf-8', newline='') as csvfile:
+                writer = csv.writer(csvfile)
+                for item in chart_constant_table('tr').items():
+                    writer.writerow(item.text().split('\n'))
+                self.send_message('定数表已更新')
+
+        elif(inputway == '英文维基'):
+            target_url = 'https://arcaea.fandom.com/wiki/Songs_by_Level'  # 定数表页面
+            target_url_test = "wiki_en.html"
+            try:
+                # doc = pq(url=target_url)
+                doc = pq(filename=target_url_test)
+            except requests.exceptions.SSLError as e:
+                self.send_message(['爬取定数表失败。\n',
+                                   '错误类型：requests.exceptions.SSLError\n',
+                                   '请关闭代理后重试。'])
+                return 'SSLError'
+
+            chart_constant_table = doc('.tabberex-tab:nth-child(1) tbody')  # 定数表
+
+            with open(self.CCT, 'w', encoding='utf-8', newline='') as csvfile:
+                writer = csv.writer(csvfile)
+                for item in chart_constant_table('tr').items():
+                    writer.writerow(item.text().split('\n'))
+                self.send_message('定数表已更新')
 
     def UDT_list_func(self):
         if(self.config_check() == False):
