@@ -12,6 +12,7 @@
 
 使用`PyInstaller`进行单文件打包。~~打包好的程序在dist目录下。~~
 见release发行版，不再同步至git仓库。
+<!-- PyInstaller -F -w arc_pttcul.py -->
 
 ## 初始化
 
