@@ -8,3 +8,4 @@ build/
 *.html
 
 !GUI_PySide6/csv示例/*.csv
+!GUI_PySide6/定数表页面示例（开发用，测试爬虫）/*.html

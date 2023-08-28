@@ -60,14 +60,21 @@ class Widget(QWidget):
     def CCT_update_func(self):
         inputways = ['中文维基', '英文维基']
         inputway, okPressed = QInputDialog.getItem(
-            self, '选择定数表获取方式', '中文维基: wiki.arcaea.cn/定数详表\n英文维基: arcaea.fandom.com/wiki/Songs_by_Level', inputways, editable=False)
+            self, '选择定数表获取方式',
+            '中文维基: wiki.arcaea.cn/定数详表\n' +
+            '英文维基: arcaea.fandom.com/wiki/Songs_by_Level',
+            inputways, editable=False)
         if(okPressed == False):
             return
 
+        QMessageBox.warning(self, "提示", "网页访问速度可能较慢，请耐心等待")
+
         if(inputway == '中文维基'):
             target_url = 'https://wiki.arcaea.cn/%E5%AE%9A%E6%95%B0%E8%AF%A6%E8%A1%A8'  # 定数详表页面
+            target_url_test = "wiki_cn.html"
             try:
                 doc = pq(url=target_url)
+                # doc = pq(filename=target_url_test)
             except requests.exceptions.SSLError as e:
                 self.send_message(['爬取定数表失败。\n',
                                    '错误类型：requests.exceptions.SSLError\n',
@@ -85,20 +92,46 @@ class Widget(QWidget):
             target_url = 'https://arcaea.fandom.com/wiki/Songs_by_Level'  # 定数表页面
             target_url_test = "wiki_en.html"
             try:
-                # doc = pq(url=target_url)
-                doc = pq(filename=target_url_test)
+                doc = pq(url=target_url)
+                # doc = pq(filename=target_url_test)
             except requests.exceptions.SSLError as e:
                 self.send_message(['爬取定数表失败。\n',
                                    '错误类型：requests.exceptions.SSLError\n',
                                    '请关闭代理后重试。'])
                 return 'SSLError'
 
-            chart_constant_table = doc('.tabberex-tab:nth-child(1) tbody')  # 定数表
+            chart_constant_table_en = doc(
+                '.tabberex-tab:nth-child(1) tbody')  # 定数表
+
+            # 转换定数表格式，使其和原程序适配
+            # 表头：曲目,PST,PRS,FTR,BYD
+            chart_constant_table_cn = [['曲目', 'PST', 'PRS', 'FTR', 'BYD']]
+            dic = {}
+            cnt = 1
+            first = True
+            for item in chart_constant_table_en('tr').items():
+                # 滤掉表头
+                if(first == True):
+                    first = False
+                    continue
+                row = item.text().split('\n')
+                name = row[0]
+                artist = row[1]
+                difficulty = row[2]
+                cc = row[3]
+                if(name == 'Quon' or name == 'Genesis'):  # 同名曲消歧义
+                    name = name+'('+artist+')'
+                if(name in dic):  # 在表中，添加新难度定数
+                    chart_constant_table_cn[dic[name]].append(cc)
+                else:  # 不在表中，添加曲名和prs难度定数
+                    dic[name] = cnt
+                    cnt += 1
+                    chart_constant_table_cn.append([name, cc])
 
             with open(self.CCT, 'w', encoding='utf-8', newline='') as csvfile:
                 writer = csv.writer(csvfile)
-                for item in chart_constant_table('tr').items():
-                    writer.writerow(item.text().split('\n'))
+                for row in chart_constant_table_cn:
+                    writer.writerow(row)
                 self.send_message('定数表已更新')
 
     def UDT_list_func(self):
